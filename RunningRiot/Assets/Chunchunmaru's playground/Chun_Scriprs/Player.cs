@@ -174,7 +174,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        MeleeEnemy.SendMessage("RecieveDamage");
+        //MeleeEnemy.SendMessage("RecieveDamage");
     }
 
 }
