@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Slava Sandbox/test.unity
+=======
+- path: Assets/Kir Sandbox/Scenes/Hacc.unity
+>>>>>>> Imperium
   isLoaded: 1
   isActive: 1
