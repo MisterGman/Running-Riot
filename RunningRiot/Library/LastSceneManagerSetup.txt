@@ -1,1 +1,4 @@
-sceneSetups: []
+sceneSetups:
+- path: Assets/Kir Sandbox/Scenes/Hacc.unity
+  isLoaded: 1
+  isActive: 1
