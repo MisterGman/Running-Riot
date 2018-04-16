@@ -5,11 +5,11 @@ using UnityEngine;
 public class Attack_Player : MonoBehaviour
 {
 
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy" && Input.GetKeyDown(KeyCode.Keypad5))
+        if (other.tag == "Enemy" )
         {
-            transform.root.SendMessage("RecieveDamageFromEnemy");
+            transform.root.SendMessage("Damage");
             Debug.Log("---------------------------HIT");
         }
     }

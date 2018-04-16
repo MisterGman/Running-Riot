@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public float timeToJumpApex = .4f;
     float accelerationTimeAirborne = .2f;
     float accelerationTimeGrounded = .1f;
-    float moveSpeed = 6;
+    public float moveSpeed = 6;
 
     public Vector2 wallJumpClimb;
     public Vector2 wallJumpOff;
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     {
         CalculateVelocity();
         HandleWallSliding();
-        controller.Move(velocity * Time.deltaTime, directionalInput);
+        controller.Move(velocity  * Time.deltaTime, directionalInput);
 
         if (controller.collisions.above || controller.collisions.below)
         {
@@ -158,9 +158,9 @@ public class Player : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
     }
 
-    public void RecieveDamageFromEnemy(float dmg) //through this method object receives damage
+    public void RecieveDamageFromEnemy(float damage) //through this method object receives damage
     {
-        currHP -= dmg;
+        currHP = currHP - damage;
         if (currHP < 0) currHP = 0;
         if (currHP > maxHP) currHP = maxHP;
         //health_bar.fillAmount = currHP / maxHP;
@@ -175,6 +175,7 @@ public class Player : MonoBehaviour
     public void Damage()
     {
         //MeleeEnemy.SendMessage("RecieveDamage");
+        GameObject.FindGameObjectWithTag("Enemy").transform.SendMessage("RecieveDamageFromPlayer");
     }
 
 }

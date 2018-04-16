@@ -6,6 +6,7 @@ public class PlayerInput : MonoBehaviour
 {
 
     Player player;
+     BoxCollider obj;
 
     void Start()
     {
@@ -17,6 +18,15 @@ public class PlayerInput : MonoBehaviour
         Vector2 directionalInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         player.SetDirectionalInput(directionalInput);
 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            player.moveSpeed = 20;
+        }
+        else
+        {
+            player.moveSpeed = 6;
+            //obj.enabled = true;
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             player.OnJumpInputDown();
@@ -25,7 +35,7 @@ public class PlayerInput : MonoBehaviour
         {
             player.OnJumpInputUp();
         }
-        if (Input.GetKeyUp(KeyCode.Keypad5))
+        if (Input.GetKeyUp("f"))
         {
             player.Damage();
         }

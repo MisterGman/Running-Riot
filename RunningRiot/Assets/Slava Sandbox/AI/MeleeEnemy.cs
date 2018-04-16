@@ -12,10 +12,12 @@ public class MeleeEnemy : MonoBehaviour {
     private NavMeshAgent agent;
     private Animator anim;
     public bool facingRight;
-    public float damage = 10f;
+    public float damage = 50f;
     private WeaponHit weapon;
     private bool lockHit = false;
     public float aggroDistance = 5f;
+
+    int hp = 5;
 
     // Use this for initialization
     void Start () {
@@ -151,11 +153,12 @@ public class MeleeEnemy : MonoBehaviour {
     }
     void Damage()
     {
-        player.SendMessage("RecieveDamageFromEnemy", damage);
+        player.SendMessage("RecieveDamageFromEnemy", 25);
         weapon.GetComponent<Collider>().enabled = false;
+        Debug.Log("--1241414134----------HIT");
     }
     void RecieveDamageFromPlayer()
     {
-        Destroy(this.gameObject);
+            Destroy(this.gameObject);  
     }
 }
