@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Kir Sandbox/Scenes/First Level.unity
+- path: Assets/Slava Sandbox/test.unity
   isLoaded: 1
   isActive: 1
