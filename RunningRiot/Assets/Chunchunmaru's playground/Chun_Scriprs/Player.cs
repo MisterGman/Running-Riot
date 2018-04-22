@@ -170,18 +170,18 @@ public class Player : MonoBehaviour
             gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         }
 
-        if (controller.collisions.left)
-        {
-            Debug.Log("Left");
-            var collider = this.GetComponent<BoxCollider>() as BoxCollider;
-            collider.center = new Vector3(-collider.center.x, collider.center.y, collider.center.z);
-        }
-        else if (controller.collisions.right)
-        {
-            Debug.Log("Right");
-            var collider = this.GetComponent<BoxCollider>() as BoxCollider;
-            collider.center = new Vector3(collider.center.x, collider.center.y, collider.center.z);
-        }
+        //if (controller.collisions.left)
+        //{
+        //    Debug.Log("Left");
+        //    var collider = this.GetComponent<BoxCollider>() as BoxCollider;
+        //    collider.center = new Vector3(-collider.center.x, collider.center.y, collider.center.z);
+        //}
+        //else if (controller.collisions.right)
+        //{
+        //    Debug.Log("Right");
+        //    var collider = this.GetComponent<BoxCollider>() as BoxCollider;
+        //    collider.center = new Vector3(collider.center.x, collider.center.y, collider.center.z);
+        //}
 
         float targetVelocityX = directionalInput.x * (moveSpeed+4);
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
