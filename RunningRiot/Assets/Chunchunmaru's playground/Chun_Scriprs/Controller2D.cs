@@ -5,10 +5,13 @@ public class Controller2D : RaycastController
 {
 
     public float maxSlopeAngle = 80;
+    RaycastController ray;
 
     public CollisionInfo collisions;
     [HideInInspector]
     public Vector2 playerInput;
+
+    public bool right = false;
 
     public override void Start()
     {
@@ -37,6 +40,10 @@ public class Controller2D : RaycastController
 
         if (moveAmount.x != 0)
         {
+          //  var collider = ray.collider ;
+            //collider.center = 
+            //collider.center = (moveAmount.x > 0) ? new Vector3(collider.center.x, collider.center.y, collider.center.z) : new Vector3(-collider.center.x, collider.center.y, collider.center.z);
+
             collisions.faceDir = (int)Mathf.Sign(moveAmount.x);
         }
 
@@ -111,6 +118,9 @@ public class Controller2D : RaycastController
 
                     collisions.left = directionX == -1;
                     collisions.right = directionX == 1;
+                    
+                        right = (collisions.right) ? true: false;
+                    
                 }
             }
         }

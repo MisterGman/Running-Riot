@@ -23,15 +23,17 @@ public class GraplingHook : MonoBehaviour {
         if (Input.GetMouseButton(0) && fired == false)
             fired = true;
 
-        if(fired == true && hooked == false)
+        if (fired == true && hooked == false)
         {
-            hook.transform.Translate(new Vector3(1,1,0) * Time.deltaTime * hookTravelSpeed);
+            hook.transform.Translate(new Vector3(1, 1, 0) * Time.deltaTime * hookTravelSpeed);
             currentDistance = Vector3.Distance(transform.position, hook.transform.position);
 
-            if(currentDistance >= maxDistance)
+            if (currentDistance >= maxDistance)
             {
                 ReturnHook();
             }
+        }
+
 
             if(hooked == true)
             {
@@ -39,7 +41,6 @@ public class GraplingHook : MonoBehaviour {
                 transform.position = Vector3.MoveTowards(transform.position, hook.transform.position, playerTravelSpeed * Time.deltaTime);
                 float distanceToHook = Vector3.Distance(transform.position, hook.transform.position);
 
-                this.GetComponent<Player>().timeToJumpApex = 10;
                  if (distanceToHook < 1)
                 {
                     ReturnHook();
@@ -48,9 +49,8 @@ public class GraplingHook : MonoBehaviour {
             else
             {
                 hook.transform.parent = hookHolder.transform;
-                this.GetComponent<Player>().timeToJumpApex = .4f;
             }
-        }
+        
 		
 	}
 

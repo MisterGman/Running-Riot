@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public float timeToJumpApex = .4f;
     float accelerationTimeAirborne = .2f;
     float accelerationTimeGrounded = .1f;
-    public float moveSpeed = 6;
+    public float moveSpeed = 20f;
 
     public Vector2 wallJumpClimb;
     public Vector2 wallJumpOff;
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     public float wallStickTime = .25f;
     float timeToWallUnstick;
 
-    float gravity;
+    public float gravity;
     float maxJumpVelocity;
     float minJumpVelocity;
     Vector3 velocity;
@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
         attack = GetComponentInChildren<Attack_Player>();
         controller = GetComponent<Controller2D>();
 
+        moveSpeed = 20f;
+
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
@@ -49,7 +51,12 @@ public class Player : MonoBehaviour
     {
         CalculateVelocity();
         HandleWallSliding();
+
         controller.Move(velocity  * Time.deltaTime, directionalInput);
+
+            
+           // this.transform.rotation.x = -this.transform.rotation.x;
+        
 
         if (controller.collisions.above || controller.collisions.below)
         {
@@ -66,6 +73,7 @@ public class Player : MonoBehaviour
 
     public void SetDirectionalInput(Vector2 input)
     {
+        
         directionalInput = input;
     }
 
@@ -153,7 +161,29 @@ public class Player : MonoBehaviour
 
     void CalculateVelocity()
     {
-        float targetVelocityX = directionalInput.x * moveSpeed;
+        if (this.GetComponent<GraplingHook>().hooked)
+        {
+            gravity = 0;
+        }
+        else
+        {
+            gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        }
+
+        if (controller.collisions.left)
+        {
+            Debug.Log("Left");
+            var collider = this.GetComponent<BoxCollider>() as BoxCollider;
+            collider.center = new Vector3(-collider.center.x, collider.center.y, collider.center.z);
+        }
+        else if (controller.collisions.right)
+        {
+            Debug.Log("Right");
+            var collider = this.GetComponent<BoxCollider>() as BoxCollider;
+            collider.center = new Vector3(collider.center.x, collider.center.y, collider.center.z);
+        }
+
+        float targetVelocityX = directionalInput.x * (moveSpeed+4);
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
     }
