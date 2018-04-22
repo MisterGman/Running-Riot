@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Chunchunmaru's playground/test.unity
+- path: Assets/Chunchunmaru's playground/test2.unity
   isLoaded: 1
   isActive: 1
