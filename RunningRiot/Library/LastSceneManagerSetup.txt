@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Kir Sandbox/Scenes/First Level.unity
+=======
+- path: Assets/Chunchunmaru's playground/test2.unity
+>>>>>>> 35f5e562f82e73fae72eb7c5a34ceed64a014e43
   isLoaded: 1
   isActive: 1

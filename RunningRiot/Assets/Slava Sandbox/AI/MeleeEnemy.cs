@@ -106,6 +106,7 @@ public class MeleeEnemy : MonoBehaviour {
                     agent.isStopped = true;
                     StartCoroutine(HitPlayer());
                 }
+
                 if (Vector3.Distance(transform.position, player.position) > 2)
                 {
                     currState = State.Chase;
@@ -141,24 +142,29 @@ public class MeleeEnemy : MonoBehaviour {
         lockHit = !lockHit;
         agent.isStopped = false;
     }
+
     void TurnOnHitbox()
     {
         weapon.GetComponent<Collider>().enabled = true;
-        Debug.Log("------------EnabledCollider");
+        //Debug.Log("------------EnabledCollider");
     }
     void TurnOffHitbox()
     {
         weapon.GetComponent<Collider>().enabled = false;
-        Debug.Log("------------DisanabledCollider");
+        //Debug.Log("------------DisanabledCollider");
     }
-    void Damage()
+    void DamageFromWeapon()
     {
         player.SendMessage("RecieveDamageFromEnemy", 25);
         weapon.GetComponent<Collider>().enabled = false;
-        Debug.Log("--1241414134----------HIT");
     }
+    void DamageFromBody()
+    {
+        player.SendMessage("RecieveDamageFromEnemy", 5);
+    }
+
     void RecieveDamageFromPlayer()
     {
-            Destroy(this.gameObject);  
+        Destroy(this.gameObject);  
     }
 }
