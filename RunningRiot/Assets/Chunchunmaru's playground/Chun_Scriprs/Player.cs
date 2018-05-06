@@ -4,15 +4,25 @@ using System.Collections;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
+<<<<<<< HEAD
     protected float maxHP = 10000000; // the highest available level of health
+=======
+    public float maxHP = 1000; // the highest available level of health
+>>>>>>> 35f5e562f82e73fae72eb7c5a34ceed64a014e43
     public float currHP = 100; // current health
+
+    public bool invincible;
+    public bool dashCooldown;
+    private bool dashActive;
 
     public float maxJumpHeight = 4;
     public float minJumpHeight = 1;
     public float timeToJumpApex = .4f;
     float accelerationTimeAirborne = .2f;
     float accelerationTimeGrounded = .1f;
-    public float moveSpeed = 20f;
+    [HideInInspector]
+    public float moveSpeed;
+    public float moveSpeedChanger = 10f;
 
     public Vector2 wallJumpClimb;
     public Vector2 wallJumpOff;
@@ -21,26 +31,34 @@ public class Player : MonoBehaviour
     public float wallSlideSpeedMax = 3;
     public float wallStickTime = .25f;
     float timeToWallUnstick;
+    bool wallSliding;
+    int wallDirX;
 
     public float gravity;
     float maxJumpVelocity;
     float minJumpVelocity;
-    Vector3 velocity;
+
+   
     float velocityXSmoothing;
 
-    private Attack_Player attack;
     Controller2D controller;
 
-    Vector2 directionalInput;
-    bool wallSliding;
-    int wallDirX;
+
+    [HideInInspector]
+    public Vector3 velocity;
+    [HideInInspector]
+    public Vector2 directionalInput;
+
+
+
+    public GameObject invisibleCloak;
 
     void Start()
     {
-        attack = GetComponentInChildren<Attack_Player>();
+        moveSpeed = moveSpeedChanger;
         controller = GetComponent<Controller2D>();
-
-        moveSpeed = 20f;
+        invincible = false;
+        invisibleCloak.SetActive(false);
 
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -53,13 +71,17 @@ public class Player : MonoBehaviour
         HandleWallSliding();
 
         controller.Move(velocity  * Time.deltaTime, directionalInput);
-
-            
-           // this.transform.rotation.x = -this.transform.rotation.x;
-        
+        if (invincible)
+        {
+            invisibleCloak.SetActive(true);
+        }
+        else
+        {
+            invisibleCloak.SetActive(false);
+        }
 
         if (controller.collisions.above || controller.collisions.below)
-        {
+        { 
             if (controller.collisions.slidingDownMaxSlope)
             {
                 velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
@@ -122,7 +144,33 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void OnDashInput()
+    {
+        if (!dashCooldown)
+        {
+            StartCoroutine(DashCooldown());
+            StartCoroutine(Dash());
+        }
+       
+    }
 
+    IEnumerator DashCooldown()
+    {
+        dashCooldown = true;
+        yield return new WaitForSeconds(.6f);
+        dashCooldown = false;
+    }
+    IEnumerator Dash()
+    {
+        moveSpeed = 30;
+        dashActive = true;
+        invincible = true;
+        yield return new WaitForSeconds(0.2f);
+        moveSpeed = moveSpeedChanger;
+        dashActive = false;
+        invincible = false;
+
+    }
     void HandleWallSliding()
     {
         wallDirX = (controller.collisions.left) ? -1 : 1;
@@ -164,48 +212,69 @@ public class Player : MonoBehaviour
         if (this.GetComponent<GraplingHook>().hooked)
         {
             gravity = 0;
+        } else if (dashActive)
+        {
+            gravity = -35;
         }
         else
         {
             gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         }
 
-        //if (controller.collisions.left)
-        //{
-        //    Debug.Log("Left");
-        //    var collider = this.GetComponent<BoxCollider>() as BoxCollider;
-        //    collider.center = new Vector3(-collider.center.x, collider.center.y, collider.center.z);
-        //}
-        //else if (controller.collisions.right)
-        //{
-        //    Debug.Log("Right");
-        //    var collider = this.GetComponent<BoxCollider>() as BoxCollider;
-        //    collider.center = new Vector3(collider.center.x, collider.center.y, collider.center.z);
-        //}
-
-        float targetVelocityX = directionalInput.x * (moveSpeed+4);
+        float targetVelocityX = directionalInput.x * (moveSpeed);
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
     }
 
     public void RecieveDamageFromEnemy(float damage) //through this method object receives damage
     {
+        if (invincible)
+        {
+            damage = 0;
+        } 
         currHP = currHP - damage;
         if (currHP < 0) currHP = 0;
         if (currHP > maxHP) currHP = maxHP;
-        //health_bar.fillAmount = currHP / maxHP;
         if (currHP <= 0) Die();
+        if (!invincible)
+        {
+            StartCoroutine(BeginTimeout());
+        }   
     }
 
+    IEnumerator BeginTimeout()
+    {
+        invincible = true;
+        yield return new WaitForSeconds(0.8f); 
+        invincible = false;
+    }
     protected  void Die() // things that happen while the object dies
     {
         Destroy(gameObject);
     }
 
-    public void Damage()
+    public void Attack()
     {
-        //MeleeEnemy.SendMessage("RecieveDamage");
-        GameObject.FindGameObjectWithTag("Enemy").transform.SendMessage("RecieveDamageFromPlayer");
+        velocity.x = (controller.collisions.faceDir > 0) ? 2 : -2;
+
+    }
+
+    public IEnumerator Knockback(float knockDur, float knockbackPwrY, float knockbackPwrX)
+    {
+        float timer = 0;
+
+        while (knockDur > timer)
+        {
+
+            timer += Time.deltaTime;
+
+            // velocity.x = (controller.collisions.faceDir> 0) ? knockbackDir.x * 10 * controller.collisions.faceDir : knockbackDir.x * 10 * -controller.collisions.faceDir;
+            velocity.x = (controller.collisions.faceDir > 0) ? -knockbackPwrX : knockbackPwrX;
+            velocity.y = knockbackPwrY;
+        }
+
+        yield return 0;
+
     }
 
 }

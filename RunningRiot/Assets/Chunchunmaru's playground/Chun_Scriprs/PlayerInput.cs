@@ -6,11 +6,16 @@ public class PlayerInput : MonoBehaviour
 {
 
     Player player;
-     BoxCollider obj;
+    public Collider attack;
+
+    private bool attacking = false;
+    private float attackTimer = 0;
+    private float attackCooldown = 0.3f;
 
     void Start()
     {
         player = GetComponent<Player>();
+        attack.enabled = false;
     }
 
     void Update()
@@ -18,15 +23,11 @@ public class PlayerInput : MonoBehaviour
         Vector2 directionalInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         player.SetDirectionalInput(directionalInput);
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && directionalInput.x != 0)
         {
-            player.moveSpeed = 20;
+            player.OnDashInput();
         }
-        else
-        {
-            player.moveSpeed = 6;
-            //obj.enabled = true;
-        }
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
             player.OnJumpInputDown();
@@ -35,9 +36,26 @@ public class PlayerInput : MonoBehaviour
         {
             player.OnJumpInputUp();
         }
-        if (Input.GetKeyUp("f"))
+        if (Input.GetKeyDown("f") && !attacking)
         {
-            player.Damage();
+            
+            attacking = true;
+            attackTimer = attackCooldown;
+
+            attack.enabled = true;
+        }
+        if (attacking)
+        {
+            if(attackTimer > 0)
+            {
+                player.Attack();
+                attackTimer -= Time.deltaTime;
+            }
+            else
+            {
+                attacking = false;
+                attack.enabled = false;
+            }
         }
     }
 }
