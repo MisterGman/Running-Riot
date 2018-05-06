@@ -4,11 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
-<<<<<<< HEAD
     protected float maxHP = 10000000; // the highest available level of health
-=======
     public float maxHP = 1000; // the highest available level of health
->>>>>>> 35f5e562f82e73fae72eb7c5a34ceed64a014e43
     public float currHP = 100; // current health
 
     public bool invincible;

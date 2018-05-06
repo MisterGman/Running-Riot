@@ -129,14 +129,11 @@ public class MeleeEnemy : MonoBehaviour {
                     agent.isStopped = true;
                     StartCoroutine(HitPlayer());
                 }
-<<<<<<< HEAD
-=======
 
                 if (Vector3.Distance(transform.position, player.position) > 2)
                 {
                     currState = State.Chase;
                 }
->>>>>>> 35f5e562f82e73fae72eb7c5a34ceed64a014e43
                 break;
         }
     }
