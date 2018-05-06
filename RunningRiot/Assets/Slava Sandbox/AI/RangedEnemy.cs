@@ -72,7 +72,7 @@ public class RangedEnemy : MonoBehaviour {
                 {
                     facingRight = !facingRight;
                 }
-                if (CheckReachablePoint(player.position))
+                if (CheckReachablePoint(player.position) && Vector3.Distance(transform.position, player.position) < aggroDistance)
                 {
                     currState = State.Chase;
                 }
