@@ -18,6 +18,7 @@ public class Homing : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        transform.position = new Vector3(transform.position.x,transform.position.y,0);
         Vector3 direction = target.position - rig.position;
         direction.Normalize();
         Vector3 rotateAmount = Vector3.Cross(direction, transform.up);

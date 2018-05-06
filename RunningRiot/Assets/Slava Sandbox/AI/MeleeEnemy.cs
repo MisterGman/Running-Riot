@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class MeleeEnemy : MonoBehaviour {
     private float myWidth;
     [HideInInspector]
-    public enum State { Patrol, Chase, Hit, Stand};
+    public enum State { Patrol, Chase, Hit, Stand, Flying };
     public State currState = State.Stand;
     private Transform player;
     private NavMeshAgent agent;
@@ -16,11 +16,15 @@ public class MeleeEnemy : MonoBehaviour {
     private WeaponHit weapon;
     private bool lockHit = false;
     public float aggroDistance = 5f;
-
+    public float aggroHeightDistance = 10f;
+    private bool isGrounded = true;
+    private GameObject particleS;
     int hp = 5;
 
     // Use this for initialization
     void Start () {
+        particleS = GetComponentInChildren<ParticleSystem>().gameObject;
+        particleS.SetActive(false);
         this.tag = "Enemy";
         weapon = GetComponentInChildren<WeaponHit>();
         anim = GetComponent<Animator>();
@@ -40,9 +44,27 @@ public class MeleeEnemy : MonoBehaviour {
 	void Update () {
         StayFixed();
         States();
+        IsGrounded();
         Debug.DrawLine(transform.position, transform.position + transform.forward);
         		
 	}
+    void IsGrounded()
+    {
+        Debug.DrawRay(transform.position, -Vector3.up);
+        if (Physics2D.Raycast(transform.position, -Vector3.up,0.1f))
+        {
+            Debug.Log("Grounded");
+            agent.speed = 3.5f;
+            isGrounded = true;
+            particleS.SetActive(false);
+        } else
+        {
+            Debug.Log("Not Grounded");
+            agent.speed = 10f;
+            isGrounded = false;
+            particleS.SetActive(true);
+        }
+    }
     void States()
     {
         switch (currState)
@@ -51,7 +73,7 @@ public class MeleeEnemy : MonoBehaviour {
                 if (lockHit) currState = State.Hit;
                 anim.SetTrigger("Stand");
                 agent.isStopped = true;
-                if (Vector3.Distance(transform.position, player.position) < aggroDistance)
+                if (Vector3.Distance(transform.position, player.position) < aggroDistance && Mathf.Abs(transform.position.z - player.position.z) < aggroHeightDistance)
                 {
                     currState = State.Chase;
                     agent.isStopped = false;
@@ -69,7 +91,7 @@ public class MeleeEnemy : MonoBehaviour {
                 {
                     facingRight = !facingRight;
                 }
-                if (CheckReachablePoint(player.position))
+                if (CheckReachablePoint(player.position) && Vector3.Distance(transform.position, player.position) < aggroDistance && Mathf.Abs(transform.position.y - player.position.y) < aggroHeightDistance)
                 {
                     currState = State.Chase;
                 }
@@ -86,29 +108,26 @@ public class MeleeEnemy : MonoBehaviour {
                     facingRight = true;
                 }
                 agent.SetDestination(player.position);
-                if (Vector3.Distance(transform.position, player.position) < 2)
+                if (Vector3.Distance(transform.position, player.position) < 2 && isGrounded)
                 {
                     currState = State.Hit;
                 }
 
-                if (!CheckReachablePoint(player.position))
-                {
-                    currState = State.Patrol;
-                } else if (Vector3.Distance(transform.position, player.position) > aggroDistance)
+                if (Vector3.Distance(transform.position, player.position) > aggroDistance || Mathf.Abs(transform.position.z - player.position.z) > aggroHeightDistance )
                 {
                     currState = State.Stand;
-                }
+                } 
                 break;
             case State.Hit:
+                if (Vector3.Distance(transform.position, player.position) > 2)
+                {
+                    currState = State.Chase;
+                }
                 if (!lockHit)
                 {
                     lockHit = !lockHit;
                     agent.isStopped = true;
                     StartCoroutine(HitPlayer());
-                }
-                if (Vector3.Distance(transform.position, player.position) > 2)
-                {
-                    currState = State.Chase;
                 }
                 break;
         }
@@ -135,7 +154,7 @@ public class MeleeEnemy : MonoBehaviour {
     }
     IEnumerator HitPlayer()
     {
-      
+
         anim.SetTrigger("Attack");
         yield return new WaitForSeconds(2f);
         lockHit = !lockHit;

@@ -4,7 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
-    protected float maxHP = 100; // the highest available level of health
+    protected float maxHP = 10000000; // the highest available level of health
     public float currHP = 100; // current health
 
     public float maxJumpHeight = 4;
