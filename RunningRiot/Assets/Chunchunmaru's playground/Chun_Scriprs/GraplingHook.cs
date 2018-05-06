@@ -12,36 +12,100 @@ public class GraplingHook : MonoBehaviour {
 
     public static bool fired;
     public  bool hooked;
+    public bool firedFly;
     public GameObject hookedObj;
+
+    public Collider feets;
+    private Player player;
+    private Vector3 direction;
+
+    public GameObject myPrefab;
+
+    
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        feets.enabled = false;
+        hook.SetActive(false);
+    }
 
     public float maxDistance;
     private float currentDistance;
-	
-	// Update is called once per frame
-	void Update () {
 
-        if (Input.GetMouseButton(0) && fired == false)
+    // Update is called once per frame
+    void Update () {
+        if (hook.Equals(null))
+        {
+            hook = (GameObject)Instantiate(myPrefab);
+        }
+        if (Input.GetMouseButtonDown(0) && fired == false)
+        {
             fired = true;
+            hook.SetActive(true);
+        }
 
         if (fired == true && hooked == false)
         {
-            hook.transform.Translate(new Vector3(1, 1, 0) * Time.deltaTime * hookTravelSpeed);
+            if(firedFly == false)
+            {
+                if (player.directionalInput.y > 0 && player.directionalInput.x > 0)
+                {
+                    firedFly = true;
+                    Debug.Log("Up-right");
+                    direction = new Vector3(1, 1, 0);
+                }
+                else if (player.directionalInput.y > 0 && player.directionalInput.x == 0)
+                {
+                    firedFly = true;
+                    Debug.Log("Up");
+                    direction = new Vector3(0, 1, 0);
+                }
+                else if (player.directionalInput.y > 0 && player.directionalInput.x < 0)
+                {
+                    firedFly = true;
+                    Debug.Log("Up-left");
+                    direction = new Vector3(1, 1, 0);
+                }
+                else if (player.directionalInput.y < 0  && player.velocity.y != 0)
+                {
+                    firedFly = true;
+                    Debug.Log("Down");
+                    direction = new Vector3(0, -1, 0);
+                    feets.enabled = true;
+                }
+                else
+                {
+                    firedFly = true;
+                    Debug.Log("Forward");
+                    direction = new Vector3(1, 0, 0);
+                    feets.enabled = true;
+                }
+            } else
+            {
+                player.velocity.y = player.velocity.y / 1.5f;
+                player.velocity.x = player.velocity.x / 1.5f;
+                hook.transform.Translate(direction * Time.deltaTime * hookTravelSpeed);
+            }
+          
+            
+            //Debug.Log(Camera.main.ScreenToWorldPoint(Input.mousePosition).x + " sdadadad " + Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
             currentDistance = Vector3.Distance(transform.position, hook.transform.position);
-
             if (currentDistance >= maxDistance)
             {
                 ReturnHook();
+
             }
         }
 
 
             if(hooked == true)
             {
+                firedFly = false;
                 hook.transform.parent = hookedObj.transform;
                 transform.position = Vector3.MoveTowards(transform.position, hook.transform.position, playerTravelSpeed * Time.deltaTime);
                 float distanceToHook = Vector3.Distance(transform.position, hook.transform.position);
 
-                 if (distanceToHook < 1)
+                 if (distanceToHook < 1.5f)
                 {
                     ReturnHook();
                 }
@@ -54,12 +118,15 @@ public class GraplingHook : MonoBehaviour {
 		
 	}
 
-    void ReturnHook()
+    public void ReturnHook()
     {
         hook.transform.rotation = hookHolder.transform.rotation;
         hook.transform.position = hookHolder.transform.position;
+        hook.SetActive(false);
         fired = false;
+        firedFly = false;
         hooked = false;
+        feets.enabled = false;
     }
 
 
