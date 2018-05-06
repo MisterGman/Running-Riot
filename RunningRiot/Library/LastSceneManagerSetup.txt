@@ -1,6 +1,7 @@
 sceneSetups:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 - path: Assets/Kir Sandbox/Scenes/First Level.unity
 =======
 - path: Assets/Chunchunmaru's playground/test2.unity
@@ -8,5 +9,8 @@ sceneSetups:
 =======
 - path: Assets/Slava Sandbox/test.unity
 >>>>>>> 07fdf35195b8c60cab399e42c3aa7e241ed50f2a
+=======
+- path: Assets/Chunchunmaru's playground/test2.unity
+>>>>>>> c1b9f0f942941e3825df0c9e6d9552f3a64c3f0e
   isLoaded: 1
   isActive: 1

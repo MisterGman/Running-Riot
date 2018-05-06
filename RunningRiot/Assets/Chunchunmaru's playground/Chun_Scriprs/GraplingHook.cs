@@ -51,32 +51,32 @@ public class GraplingHook : MonoBehaviour {
                 if (player.directionalInput.y > 0 && player.directionalInput.x > 0)
                 {
                     firedFly = true;
-                    Debug.Log("Up-right");
+                   // Debug.Log("Up-right");
                     direction = new Vector3(1, 1, 0);
                 }
                 else if (player.directionalInput.y > 0 && player.directionalInput.x == 0)
                 {
                     firedFly = true;
-                    Debug.Log("Up");
+                    //Debug.Log("Up");
                     direction = new Vector3(0, 1, 0);
                 }
                 else if (player.directionalInput.y > 0 && player.directionalInput.x < 0)
                 {
                     firedFly = true;
-                    Debug.Log("Up-left");
+                   // Debug.Log("Up-left");
                     direction = new Vector3(1, 1, 0);
                 }
                 else if (player.directionalInput.y < 0  && player.velocity.y != 0)
                 {
                     firedFly = true;
-                    Debug.Log("Down");
+                    //Debug.Log("Down");
                     direction = new Vector3(0, -1, 0);
                     feets.enabled = true;
                 }
                 else
                 {
                     firedFly = true;
-                    Debug.Log("Forward");
+                   // Debug.Log("Forward");
                     direction = new Vector3(1, 0, 0);
                     feets.enabled = true;
                 }
