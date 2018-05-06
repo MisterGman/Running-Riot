@@ -53,13 +53,13 @@ public class MeleeEnemy : MonoBehaviour {
         Debug.DrawRay(transform.position, -Vector3.up);
         if (Physics2D.Raycast(transform.position, -Vector3.up,0.1f))
         {
-            Debug.Log("Grounded");
+           // Debug.Log("Grounded");
             agent.speed = 3.5f;
             isGrounded = true;
             particleS.SetActive(false);
         } else
         {
-            Debug.Log("Not Grounded");
+           // Debug.Log("Not Grounded");
             agent.speed = 10f;
             isGrounded = false;
             particleS.SetActive(true);

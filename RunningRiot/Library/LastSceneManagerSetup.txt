@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Slava Sandbox/test.unity
+- path: Assets/Chunchunmaru's playground/test2.unity
   isLoaded: 1
   isActive: 1
