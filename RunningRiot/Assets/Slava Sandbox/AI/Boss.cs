@@ -65,7 +65,7 @@ public class Boss : MonoBehaviour {
     {
         if (Input.GetButtonUp("Fire1"))
         {
-            RecieveDamageFromPlayer(50f);
+          //  RecieveDamageFromPlayer(50f);
         }
     }
     private void SwitchPhases()
@@ -264,7 +264,6 @@ public class Boss : MonoBehaviour {
     {
         player.SendMessage("RecieveDamageFromEnemy", 25);
         weapon.GetComponent<Collider>().enabled = false;
-        Debug.Log("--1241414134----------HIT");
     }
     void RecieveDamageFromPlayer(float damage)
     {

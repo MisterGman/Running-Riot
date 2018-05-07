@@ -270,7 +270,7 @@ public class Player : MonoBehaviour
             velocity.y = knockbackPwrY;
         }
 
-        yield return 0;
+        yield return new WaitForSeconds(0f);
 
     }
 

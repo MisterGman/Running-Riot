@@ -16,7 +16,7 @@ public class AttackDamageHit : MonoBehaviour {
         //Debug.Log("HUI");
         if (other.tag == "Enemy")
         {
-            other.transform.SendMessage("RecieveDamageFromPlayer");
+            other.transform.SendMessage("RecieveDamageFromPlayer", 100);
             if (knockback)
             {
                 player.GetComponent<GraplingHook>().ReturnHook();
