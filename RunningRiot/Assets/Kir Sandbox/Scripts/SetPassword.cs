@@ -10,8 +10,9 @@ public class SetPassword : MonoBehaviour
     public RandomImage passImage;
 
     float oldRR;
-    float oldRCL;
-    float oldRCR;
+    float oldRC1;
+    float oldRC2;
+
 
     public Image image00;
     public Image image01;
@@ -115,8 +116,8 @@ public class SetPassword : MonoBehaviour
     void Start()
     {
         oldRR = 0;
-        oldRCL = 0;
-        oldRCR = 0;
+        oldRC1 = 0;
+        oldRC2 = 0;
 
         allImages = new Image[6, 15];
 
@@ -263,27 +264,43 @@ public class SetPassword : MonoBehaviour
         allImages[randomRow, randomColRight].GetComponent<RandomImage>().changeToPass();
         allImages[randomRow, randomColRight + 1].GetComponent<RandomImage>().changeToPass();
         allImages[randomRow, randomColRight + 2].GetComponent<RandomImage>().changeToPass();*/
-        
 
 
-        int randomCol = UnityEngine.Random.Range(0, allImages.GetLength(1) - 2);
-        Debug.Log(randomCol);
-        int randomRow = UnityEngine.Random.Range(0, allImages.GetLength(0));
-        Debug.Log(randomRow);
-        allImages[randomRow, randomCol].GetComponent<RandomImage>().changeToPass();
-        if (allImages[randomRow, randomCol] == null)
+        int randomCol1 = UnityEngine.Random.Range(0, allImages.GetLength(1) - 3);
+        if (randomCol1 == oldRC1)
         {
-            Debug.Log("Null is on 0");
+            randomCol1 = UnityEngine.Random.Range(0, allImages.GetLength(0));
         }
-        allImages[randomRow, randomCol + 1].GetComponent<RandomImage>().changeToPass();
-        if (allImages[randomRow, randomCol + 1] == null)
+        else
         {
-            Debug.Log("Null is on 1");
+            oldRC1 = randomCol1;
         }
-        allImages[randomRow, randomCol + 2].GetComponent<RandomImage>().changeToPass();
-        if (allImages[randomRow, randomCol + 2] == null)
+
+        int randomCol2 = UnityEngine.Random.Range(0, allImages.GetLength(1) - 3);
+        if (randomCol2 == oldRC2)
         {
-            Debug.Log("Null is on 2");
+            randomCol2 = UnityEngine.Random.Range(0, allImages.GetLength(0));
         }
+        else
+        {
+            oldRC2 = randomCol1;
+        }
+
+        int randomRow1 = UnityEngine.Random.Range(0, allImages.GetLength(0));
+        int randomRow2 = UnityEngine.Random.Range(0, allImages.GetLength(0));
+        if (randomRow2 == randomRow1)
+        {
+            randomRow2 = UnityEngine.Random.Range(0, allImages.GetLength(0));
+        }
+
+        allImages[randomRow1, randomCol1].GetComponent<RandomImage>().changeToPass();
+        allImages[randomRow1, randomCol1 + 1].GetComponent<RandomImage>().changeToPass();
+        allImages[randomRow1, randomCol1 + 2].GetComponent<RandomImage>().changeToPass();
+        allImages[randomRow1, randomCol1 + 3].GetComponent<RandomImage>().changeToPass();
+
+        allImages[randomRow2, randomCol2].GetComponent<RandomImage>().changeToPass();
+        allImages[randomRow2, randomCol2 + 1].GetComponent<RandomImage>().changeToPass();
+        allImages[randomRow2, randomCol2 + 2].GetComponent<RandomImage>().changeToPass();
+        allImages[randomRow2, randomCol2 + 3].GetComponent<RandomImage>().changeToPass();
     }
 }
