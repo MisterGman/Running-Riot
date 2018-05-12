@@ -7,7 +7,7 @@ public class SetPassword : MonoBehaviour
 {
     public Image[,] allImages;
 
-    public RandomImage passImage;
+
 
     float oldRR;
     float oldRC1;
