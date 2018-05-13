@@ -4,21 +4,24 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class RangedEnemy : MonoBehaviour {
-    private float myWidth;
     [HideInInspector]
     public enum State { Patrol, Chase, Hit, Stand };
     public State currState = State.Stand;
-    private Transform player;
+    public Transform player;
     private NavMeshAgent agent;
     private Animator anim;
     public bool facingRight;
     public float damage = 50f;
     private WeaponHit weapon;
     private bool lockHit = false;
+    private bool seePlayer = false;
     public float aggroDistance = 5f;
+    private bool teleportedOnce;
     public GameObject bullet;
     public Transform bulletInstantiatePosition;
-    int hp = 5;
+    public float health = 50;
+    private bool vulnatable = false;
+
 
     // Use this for initialization
     void Start()
@@ -26,7 +29,9 @@ public class RangedEnemy : MonoBehaviour {
         this.tag = "Enemy";
         weapon = GetComponentInChildren<WeaponHit>();
         anim = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        if(player == null)
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+        Debug.Log(player.transform.position + " player");
         agent = GetComponent<NavMeshAgent>();
         if (transform.rotation.y < 0)
         {
@@ -42,8 +47,12 @@ public class RangedEnemy : MonoBehaviour {
     void Update()
     {
         StayFixed();
-        States();
-        Debug.DrawLine(transform.position, transform.position + transform.forward);
+        if (!vulnatable)
+        {
+            States();
+            PlayerInRange();
+        }
+        
 
     }
     void States()
@@ -51,57 +60,20 @@ public class RangedEnemy : MonoBehaviour {
         switch (currState)
         {
             case State.Stand:
-                if (lockHit) currState = State.Hit;
                 anim.SetTrigger("Stand");
                 agent.isStopped = true;
-                if (Vector3.Distance(transform.position, player.position) < aggroDistance)
+                if (seePlayer)
                 {
-                    currState = State.Chase;
+                    currState = State.Hit;
                     agent.isStopped = false;
                 }
 
                 break;
             case State.Patrol:
-                anim.SetTrigger("Run");
-                agent.stoppingDistance = 0f;
-                if (CheckReachablePoint(transform.position + transform.forward))
-                {
-                    agent.SetDestination(transform.position + transform.forward);
-                }
-                else
-                {
-                    facingRight = !facingRight;
-                }
-                if (CheckReachablePoint(player.position) && Vector3.Distance(transform.position, player.position) < aggroDistance)
-                {
-                    currState = State.Chase;
-                }
+
                 break;
             case State.Chase:
-                anim.SetTrigger("Run");
-                agent.stoppingDistance = 1f;
-                if (player.position.x < transform.position.x)
-                {
-                    facingRight = false;
-                }
-                else
-                {
-                    facingRight = true;
-                }
-                agent.SetDestination(player.position);
-                if (Vector3.Distance(transform.position, player.position) < 10)
-                {
-                    currState = State.Hit;
-                }
 
-                if (!CheckReachablePoint(player.position))
-                {
-                    currState = State.Patrol;
-                }
-                else if (Vector3.Distance(transform.position, player.position) > aggroDistance)
-                {
-                    currState = State.Stand;
-                }
                 break;
             case State.Hit:
                 if (player.position.x < transform.position.x)
@@ -118,28 +90,30 @@ public class RangedEnemy : MonoBehaviour {
                     agent.isStopped = true;
                     StartCoroutine(HitPlayer());
                 }
-                if (Vector3.Distance(transform.position, player.position) < 2)
+                if (Vector3.Distance(transform.position, player.position) < 2 && !teleportedOnce)
                 {
                     Teleport();
+                    teleportedOnce = true;
                 }
 
-                if (Vector3.Distance(transform.position, player.position) > 10)
+                if (!seePlayer)
                 {
-                    currState = State.Chase;
+                    currState = State.Stand;
                 }
                 break;
         }
     }
     void Teleport()
     {
-        Vector3 randomDirection = Random.insideUnitSphere * 10;
+        Vector3 randomDirection = Random.insideUnitSphere * aggroDistance;
         randomDirection += transform.position;
         NavMeshHit hit;
         Vector3 finalPosition = Vector3.zero;
-        if (NavMesh.SamplePosition(randomDirection, out hit, 10, 1))
+        if (NavMesh.SamplePosition(randomDirection, out hit, aggroDistance, 1))
         {
             finalPosition = hit.position;
         }
+
         agent.enabled = false;
         transform.position =  finalPosition;
         agent.enabled = true;
@@ -163,6 +137,19 @@ public class RangedEnemy : MonoBehaviour {
             }
         }
 
+    }
+    void PlayerInRange()
+    {
+        if (!Physics2D.Linecast(transform.position, player.position, LayerMask.GetMask("Obsticle")) && Vector3.Distance(transform.position, player.position) < aggroDistance)
+        {
+            seePlayer = true;
+            Debug.DrawLine(transform.position,player.position,Color.green);
+        } else
+        {
+            Debug.DrawLine(transform.position, player.position, Color.red);
+            seePlayer = false;
+        }
+        
     }
     IEnumerator HitPlayer()
     {
@@ -193,8 +180,27 @@ public class RangedEnemy : MonoBehaviour {
         weapon.GetComponent<Collider>().enabled = false;
         Debug.Log("--1241414134----------HIT");
     }
-    void RecieveDamageFromPlayer()
+    void RecieveDamageFromPlayer(float damage)
     {
-        Destroy(this.gameObject);
+        StartCoroutine(Knockback());
+        health -= damage;
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+    public IEnumerator Knockback()
+    {
+        vulnatable = true;
+        if (player.position.x < transform.position.x)
+        {
+            agent.SetDestination(transform.position + new Vector3(2, 0, 0));
+        }
+        else
+        {
+            agent.SetDestination(transform.position - new Vector3(2, 0, 0));
+        }
+        yield return new WaitForSeconds(1.5f);
+        vulnatable = false;
     }
 }

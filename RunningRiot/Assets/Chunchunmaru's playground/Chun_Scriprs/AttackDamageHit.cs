@@ -6,6 +6,7 @@ public class AttackDamageHit : MonoBehaviour {
     public bool knockback;
 
     private Player player;
+    public float damage = 20;
 
     void Start()
     {
@@ -16,11 +17,11 @@ public class AttackDamageHit : MonoBehaviour {
         //Debug.Log("HUI");
         if (other.tag == "Enemy")
         {
-            other.transform.SendMessage("RecieveDamageFromPlayer", 100);
+            other.transform.SendMessage("RecieveDamageFromPlayer", damage);
             if (knockback)
             {
                 player.GetComponent<GraplingHook>().ReturnHook();
-                StartCoroutine(player.Knockback(3f, 50, 5));
+                //StartCoroutine(player.Knockback(3f, 50, 5));
             }
         }
     }

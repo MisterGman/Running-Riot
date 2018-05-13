@@ -28,6 +28,7 @@ public class Boss : MonoBehaviour {
     private string currentTrigger = "";
     private GameObject particleS;
     private bool animationOnce = false;
+    public int multiplier = 1;
     int hp = 5;
 
     // Use this for initialization
@@ -55,7 +56,8 @@ public class Boss : MonoBehaviour {
     void Update()
     {
         StayFixed();
-        IsGrounded();
+        if(!gotHit)
+            IsGrounded();
         AnimationStates();
         SwitchPhases();
         Phases();
@@ -113,12 +115,14 @@ public class Boss : MonoBehaviour {
         }
         else
         {
-            agent.speed = 15f;
+            agent.speed = 15f*multiplier;
             isGrounded = false;
             particleS.SetActive(true);
         }
     }
     State currentStateIf;
+    private bool gotHit;
+
     void AnimationStates()
     {
         if (currState!= currentStateIf)
@@ -243,11 +247,11 @@ public class Boss : MonoBehaviour {
             agent.SetDestination(transform.position + new Vector3(-10, 0, 0));
         }
         
-        agent.speed = 15f;
+        agent.speed = 15f*multiplier;
         yield return new WaitForSeconds(1f);
         agent.speed = 3.5f;
         currState = State.Chase;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(5f/ multiplier);
         lockHit = false;
     }
     void TurnOnHitbox()
@@ -267,7 +271,18 @@ public class Boss : MonoBehaviour {
     }
     void RecieveDamageFromPlayer(float damage)
     {
+        
         currentHealth -= damage;
+        StartCoroutine(GotHit());
         //Destroy(this.gameObject);
+    }
+    IEnumerator GotHit()
+    {
+        gotHit = true;
+        float currAgentSpeed = agent.speed;
+        agent.speed = 0f;
+        yield return new WaitForSeconds(2f);
+        agent.speed = currAgentSpeed;
+        gotHit = false;
     }
 }

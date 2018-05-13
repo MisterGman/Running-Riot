@@ -19,7 +19,8 @@ public class MeleeEnemy : MonoBehaviour {
     public float aggroHeightDistance = 10f;
     private bool isGrounded = true;
     private GameObject particleS;
-    int hp = 5;
+    public float health = 70;
+    private bool vulnatable = false;
 
     // Use this for initialization
     void Start () {
@@ -43,8 +44,11 @@ public class MeleeEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         StayFixed();
-        States();
-        IsGrounded();
+        if (!vulnatable)
+        {
+            States();
+            IsGrounded();
+        }
         Debug.DrawLine(transform.position, transform.position + transform.forward);
         		
 	}
@@ -186,8 +190,26 @@ public class MeleeEnemy : MonoBehaviour {
         player.SendMessage("RecieveDamageFromEnemy", 5);
     }
 
-    void RecieveDamageFromPlayer()
+    void RecieveDamageFromPlayer(float damage)
     {
-        Destroy(this.gameObject);  
+        StartCoroutine(Knockback());
+        health -= damage;
+        if(health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+
+    }
+    public IEnumerator Knockback()
+    {
+        vulnatable = true;
+        if (player.position.x < transform.position.x)
+        {
+            agent.SetDestination(transform.position + new Vector3(2,0,0));
+        } else{
+            agent.SetDestination(transform.position - new Vector3(2, 0, 0));
+        }
+        yield return new WaitForSeconds(1.5f);
+        vulnatable = false;
     }
 }
