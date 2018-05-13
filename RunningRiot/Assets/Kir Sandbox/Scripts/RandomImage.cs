@@ -35,7 +35,7 @@ public class RandomImage : MonoBehaviour {
 	{
 		int num = UnityEngine.Random.Range(0, images.Length - 1);
 		randomImage.sprite = images[num];
-        Invoke("changeImage", 0.5f);
+        Invoke("changeImage", 1f);
 	}
     public void changeToPass()
     {

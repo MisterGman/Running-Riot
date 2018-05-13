@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Slava Sandbox/test.unity
+=======
+- path: Assets/Kir Sandbox/Scenes/Hacc.unity
+>>>>>>> c7adf4e49a038d981eb15c8241aabb41cf55f0b9
   isLoaded: 1
   isActive: 1
