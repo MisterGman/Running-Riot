@@ -43,7 +43,14 @@ public class PlayerInput : MonoBehaviour
             attackTimer = attackCooldown;
 
             attack.enabled = true;
+            attack.GetComponent<MeshRenderer>().enabled = true;
         }
+
+        if (Input.GetKeyDown("p"))
+        {
+            player.score += 100;
+        }
+
         if (attacking)
         {
             if(attackTimer > 0)
@@ -55,6 +62,7 @@ public class PlayerInput : MonoBehaviour
             {
                 attacking = false;
                 attack.enabled = false;
+                attack.GetComponent<MeshRenderer>().enabled = false;
             }
         }
     }

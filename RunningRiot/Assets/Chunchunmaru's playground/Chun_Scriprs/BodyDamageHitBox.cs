@@ -15,7 +15,7 @@ public class BodyDamageHitBox : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("HUI");
+        //Debug.Log("HUI");
         if (other.tag == "Enemy" && player.invincible == false)
         {
             //other.transform.SendMessage("RecieveDamageFromPlayer");

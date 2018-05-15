@@ -4,10 +4,10 @@ using System.Collections;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
-    //protected float maxHP = 10000000; // the highest available level of health
+    public int life = 1;
     public float maxHP = 1000; // the highest available level of health
     public float currHP = 100; // current health
-
+    public float score;
     public bool invincible;
     public bool dashCooldown;
     private bool dashActive;
@@ -46,6 +46,8 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public Vector2 directionalInput;
 
+    private int scoreDamage = 0;
+    private int scoreSecrets = 0;
 
 
     public GameObject invisibleCloak;
@@ -236,7 +238,8 @@ public class Player : MonoBehaviour
         if (!invincible)
         {
             StartCoroutine(BeginTimeout());
-        }   
+        }
+        scoreDamage += (int)damage;
     }
 
     IEnumerator BeginTimeout()
@@ -252,7 +255,7 @@ public class Player : MonoBehaviour
 
     public void Attack()
     {
-        velocity.x = (controller.collisions.faceDir > 0) ? 2 : -2;
+        //velocity.x = (controller.collisions.faceDir > 0) ? 2 : -2;
 
     }
 
