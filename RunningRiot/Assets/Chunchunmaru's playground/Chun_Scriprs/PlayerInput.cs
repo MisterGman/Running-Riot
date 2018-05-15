@@ -36,7 +36,7 @@ public class PlayerInput : MonoBehaviour
         {
             player.OnJumpInputUp();
         }
-        if (Input.GetKeyDown("f") && !attacking)
+        if (Input.GetButtonDown("Fire1") && !attacking)
         {
             
             attacking = true;
