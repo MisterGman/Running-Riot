@@ -72,6 +72,7 @@ public class GraplingHook : MonoBehaviour {
                     //Debug.Log("Down");
                     direction = new Vector3(0, -1, 0);
                     feets.enabled = true;
+                    feets.GetComponent<MeshRenderer>().enabled = true;
                 }
                 else
                 {
@@ -79,6 +80,8 @@ public class GraplingHook : MonoBehaviour {
                    // Debug.Log("Forward");
                     direction = new Vector3(1, 0, 0);
                     feets.enabled = true;
+                    feets.GetComponent<MeshRenderer>().enabled = true;
+
                 }
             } else
             {
@@ -127,6 +130,8 @@ public class GraplingHook : MonoBehaviour {
         firedFly = false;
         hooked = false;
         feets.enabled = false;
+        feets.GetComponent<MeshRenderer>().enabled = false;
+
     }
 
 
