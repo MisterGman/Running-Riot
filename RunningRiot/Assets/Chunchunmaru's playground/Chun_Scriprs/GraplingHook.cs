@@ -38,7 +38,7 @@ public class GraplingHook : MonoBehaviour {
         {
             hook = (GameObject)Instantiate(myPrefab);
         }
-        if (Input.GetMouseButtonDown(0) && fired == false)
+        if (Input.GetKeyDown("4") && fired == false)
         {
             fired = true;
             hook.SetActive(true);
@@ -108,7 +108,7 @@ public class GraplingHook : MonoBehaviour {
                 transform.position = Vector3.MoveTowards(transform.position, hook.transform.position, playerTravelSpeed * Time.deltaTime);
                 float distanceToHook = Vector3.Distance(transform.position, hook.transform.position);
 
-                 if (distanceToHook < 1.5f)
+                 if (distanceToHook < 2f)
                 {
                     ReturnHook();
                 }
