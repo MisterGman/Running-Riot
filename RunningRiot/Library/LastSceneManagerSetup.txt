@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
-- path: Assets/Kir Sandbox/Scenes/Fight and Explore.unity
-=======
-- path: Assets/Chunchunmaru's playground/Level-1.unity
->>>>>>> 44b4423b4cfa32bdc1d3419c890959e3e8400815
+- path: Assets/Kir Sandbox/Scenes/Editor level.unity
   isLoaded: 1
   isActive: 1
