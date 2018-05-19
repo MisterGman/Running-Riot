@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Kir Sandbox/Scenes/Hacc.unity
+- path: Assets/Kir Sandbox/Scenes/Fight and Explore.unity
   isLoaded: 1
   isActive: 1
