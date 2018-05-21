@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Slava Sandbox/Tutorial.unity
+=======
+- path: Assets/Kir Sandbox/Scenes/Editor level.unity
+>>>>>>> e9e950d85af0d822f74afa3a4ef55335926be01e
   isLoaded: 1
   isActive: 1
