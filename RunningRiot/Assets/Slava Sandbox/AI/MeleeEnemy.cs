@@ -21,6 +21,7 @@ public class MeleeEnemy : MonoBehaviour {
     private GameObject particleS;
     public float health = 70;
     private bool vulnatable = false;
+    public float speed = 3.5f;
 
     // Use this for initialization
     void Start () {
@@ -58,7 +59,7 @@ public class MeleeEnemy : MonoBehaviour {
         if (Physics2D.Raycast(transform.position, -Vector3.up,0.1f))
         {
            // Debug.Log("Grounded");
-            agent.speed = 3.5f;
+            agent.speed = speed;
             isGrounded = true;
             particleS.SetActive(false);
         } else

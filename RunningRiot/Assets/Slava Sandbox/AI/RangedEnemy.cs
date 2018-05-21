@@ -16,6 +16,7 @@ public class RangedEnemy : MonoBehaviour {
     private bool lockHit = false;
     private bool seePlayer = false;
     public float aggroDistance = 5f;
+    [SerializeField]
     private bool teleportedOnce;
     public GameObject bullet;
     public Transform bulletInstantiatePosition;
@@ -73,7 +74,19 @@ public class RangedEnemy : MonoBehaviour {
 
                 break;
             case State.Chase:
-
+                if (player.position.x < transform.position.x)
+                {
+                    facingRight = false;
+                }
+                else
+                {
+                    facingRight = true;
+                }
+                agent.SetDestination(player.position);
+                if (Vector3.Distance(transform.position, player.position) < aggroDistance)
+                {
+                    currState = State.Hit;
+                }
                 break;
             case State.Hit:
                 if (player.position.x < transform.position.x)
@@ -98,7 +111,7 @@ public class RangedEnemy : MonoBehaviour {
 
                 if (!seePlayer)
                 {
-                    currState = State.Stand;
+                    currState = State.Chase;
                 }
                 break;
         }
