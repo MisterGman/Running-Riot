@@ -38,7 +38,7 @@ public class GraplingHook : MonoBehaviour {
         {
             hook = (GameObject)Instantiate(myPrefab);
         }
-        if (Input.GetKeyDown("4") && fired == false)
+        if (Input.GetKeyDown("4") && fired == false && player.wallVzhuh == false)
         {
             fired = true;
             hook.SetActive(true);
@@ -70,10 +70,18 @@ public class GraplingHook : MonoBehaviour {
                 {
                     firedFly = true;
                     //Debug.Log("Down");
-                    direction = new Vector3(0, -1, 0);
+                    //if(player.directionalInput.x > 0 || player.directionalInput.x < 0)
+                    //{
+                    //    direction = new Vector3(-1, -1, 0);
+                    //} 
+                    //else
+                    //{
+                        direction = new Vector3(0, -1, 0);
+                    //}
+                    
                     feets.enabled = true;
                     feets.GetComponent<MeshRenderer>().enabled = true;
-                }
+                } 
                 else
                 {
                     firedFly = true;
@@ -103,15 +111,16 @@ public class GraplingHook : MonoBehaviour {
 
             if(hooked == true)
             {
-                firedFly = false;
+            float distanceToHook = Vector3.Distance(transform.position, hook.transform.position);
+
+            if (distanceToHook < 1.5f || player.wallVzhuh)
+            {
+                ReturnHook();
+            }
+            firedFly = false;
                 hook.transform.parent = hookedObj.transform;
                 transform.position = Vector3.MoveTowards(transform.position, hook.transform.position, playerTravelSpeed * Time.deltaTime);
-                float distanceToHook = Vector3.Distance(transform.position, hook.transform.position);
 
-                 if (distanceToHook < 2f)
-                {
-                    ReturnHook();
-                }
             }
             else
             {

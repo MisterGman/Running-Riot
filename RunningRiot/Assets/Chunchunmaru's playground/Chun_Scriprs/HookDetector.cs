@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HookDetector : MonoBehaviour {
     public GameObject player;
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("Hit1");
         if (other.tag == "Hookable")

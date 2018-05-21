@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public bool invincible;
     public bool dashCooldown;
     private bool dashActive;
+    public bool wallVzhuh;
 
     public float maxJumpHeight = 4;
     public float minJumpHeight = 1;
@@ -68,7 +69,14 @@ public class Player : MonoBehaviour
     {
         CalculateVelocity();
         HandleWallSliding();
-
+        if (controller.collisions.above || controller.collisions.right || controller.collisions.left)
+        {
+            wallVzhuh = true;
+        }
+        else
+        {
+            wallVzhuh = false;
+        }
         controller.Move(velocity  * Time.deltaTime, directionalInput);
         if (invincible)
         {
@@ -164,7 +172,7 @@ public class Player : MonoBehaviour
         moveSpeed = 30;
         dashActive = true;
         invincible = true;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         moveSpeed = moveSpeedChanger;
         dashActive = false;
         invincible = false;
@@ -221,15 +229,9 @@ public class Player : MonoBehaviour
         }
 
         float targetVelocityX = directionalInput.x * (moveSpeed);
-        if(directionalInput.x == 0)
-        {
-            velocity.x = 0;
-        }
-        else
-        {
-            velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
-
-        }
+        accelerationTimeGrounded = (directionalInput.x == 0) ? 0 : accelerationTimeGrounded;
+        //Debug.Log(accelerationTimeGrounded);
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
     }
 
