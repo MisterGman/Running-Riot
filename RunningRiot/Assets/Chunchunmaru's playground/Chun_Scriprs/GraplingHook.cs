@@ -38,11 +38,9 @@ public class GraplingHook : MonoBehaviour {
         {
             hook = (GameObject)Instantiate(myPrefab);
         }
-<<<<<<< HEAD
-        if (Input.GetButtonDown("Fire2") && fired == false)
-=======
-        if (Input.GetKeyDown("4") && fired == false && player.wallVzhuh == false)
->>>>>>> e9e950d85af0d822f74afa3a4ef55335926be01e
+
+        if (Input.GetButtonDown("Fire2") && fired == false && player.wallVzhuh == false)
+
         {
             fired = true;
             hook.SetActive(true);
