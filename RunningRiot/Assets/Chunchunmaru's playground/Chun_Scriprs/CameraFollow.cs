@@ -18,6 +18,8 @@ public class CameraFollow : MonoBehaviour
     float lookAheadDirX;
     float smoothLookVelocityX;
     float smoothVelocityY;
+    [SerializeField]
+    private float distanceFromPlayer = 17;
 
     bool lookAheadStopped;
 
@@ -55,7 +57,7 @@ public class CameraFollow : MonoBehaviour
 
         focusPosition.y = Mathf.SmoothDamp(transform.position.y, focusPosition.y, ref smoothVelocityY, verticalSmoothTime);
         focusPosition += Vector2.right * currentLookAheadX;
-        transform.position = (Vector3)focusPosition  + Vector3.forward * -10;
+        transform.position = (Vector3)focusPosition  + Vector3.forward * -distanceFromPlayer;
     }
 
     void OnDrawGizmos()
