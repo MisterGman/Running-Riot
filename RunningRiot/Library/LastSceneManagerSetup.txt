@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Key Scenes/Editor level.unity
+- path: Assets/Slava Sandbox/test.unity
   isLoaded: 1
   isActive: 1
